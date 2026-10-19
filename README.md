@@ -7,3 +7,17 @@ The goal of this project is to build a system that takes laptop health readings 
 - Explain each alert in plain language with a suggested action. 
 - Show history and trends so users can see patterns over time. 
 - Improve over time using user feedback on false alarms and missed alerts. 
+
+We utilize the Laptop Motherboard Health Monitoring Dataset dataset from Kaggle user Mohd zia to train our ML model (see data source below). 
+
+## Data Source
+```
+@misc{mohd_zia_2024,
+	title={Laptop Motherboard Health Monitoring Dataset},
+	url={https://www.kaggle.com/dsv/8717402},
+	DOI={10.34740/KAGGLE/DSV/8717402},
+	publisher={Kaggle},
+	author={Mohd zia},
+	year={2024}
+}
+```
