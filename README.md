@@ -10,6 +10,10 @@ The goal of this project is to build a system that takes laptop health readings 
 
 We utilize the Laptop Motherboard Health Monitoring Dataset dataset from Kaggle user Mohd zia to train our ML model (see data source below). 
 
+## Dependencies
+- [numpy](https://numpy.org/)
+- [scikit-learn](https://scikit-learn.org/stable/index.html)
+
 ## Data Source
 ```
 @misc{mohd_zia_2024,
