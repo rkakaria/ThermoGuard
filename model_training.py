@@ -1,5 +1,6 @@
 import pandas as pd 
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import LabelBinarizer
 
 # load, clean, and format data - remove model numbers from laptops as they are all unique
@@ -22,22 +23,30 @@ x_train, x_temp, y_train, y_temp = train_test_split(x, y, stratify = y, test_siz
 # split into test and validate dataframes
 x_val, x_test, y_val, y_test = train_test_split(x_temp, y_temp, stratify = y_temp, test_size = (0.5), random_state = 1)
 
-# encode categorical data using OneHot encoding with pd.get_dummies()
-train_cat = x_train['ModelName']
-train_encoded = pd.get_dummies(train_cat, dtype = int)
-x_train = pd.concat([x_train.drop(['ModelName'], axis = 1), train_encoded], axis = 1)
+# encode categorical data using OneHot encoding
+encoder = OneHotEncoder(sparse_output=False).set_output(transform = "pandas")
 
-test_cat = x_test['ModelName']
-test_encoded = pd.get_dummies(test_cat, dtype = int)
-x_test = pd.concat([x_test.drop(['ModelName'], axis = 1), test_encoded], axis = 1)
+train_cat = x_train.select_dtypes(exclude = 'number').columns
+train_encoded = encoder.fit_transform(x_train[train_cat])
+encoded_df = pd.DataFrame(train_encoded, columns = encoder.get_feature_names_out(train_cat))
+x_train = x_train.drop(['ModelName'], axis = 1)
+x_train = pd.concat([x_train, encoded_df], axis = 1)
 
-val_cat = x_val['ModelName']
-val_encoded = pd.get_dummies(val_cat, dtype = int)
-x_val = pd.concat([x_val.drop(['ModelName'], axis = 1), val_encoded], axis = 1)
+test_cat = x_test.select_dtypes(exclude = 'number').columns
+test_encoded = encoder.fit_transform(x_test[test_cat])
+encoded_df = pd.DataFrame(test_encoded, columns = encoder.get_feature_names_out(test_cat))
+x_test = x_test.drop(['ModelName'], axis = 1)
+x_test = pd.concat([x_test, encoded_df], axis = 1)
+
+val_cat = x_val.select_dtypes(exclude = 'number').columns
+val_encoded = encoder.fit_transform(x_val[val_cat])
+encoded_df = pd.DataFrame(val_encoded, columns = encoder.get_feature_names_out(val_cat))
+x_val = x_val.drop(['ModelName'], axis = 1)
+x_val = pd.concat([x_val, encoded_df], axis = 1)
 
 # encode y-axis using Label Binarizer
 lb = LabelBinarizer()
 
-y_train = lb.fit_transform(y_train)
-y_test = lb.fit_transform(y_test)
-y_val = lb.fit_transform(y_val)
+y_train = pd.DataFrame(lb.fit_transform(y_train), index = y_train.index)
+y_test = pd.DataFrame(lb.fit_transform(y_test), index = y_test.index)
+y_val = pd.DataFrame(lb.fit_transform(y_val), index = y_val.index)
