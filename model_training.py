@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import LabelBinarizer
-from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
 
 # load, clean, and format data - remove model numbers from laptops as they are all unique
 raw_data = pd.read_csv("motherboard.csv")
@@ -45,9 +45,57 @@ encoded_df = pd.DataFrame(val_encoded, columns = encoder.get_feature_names_out(v
 x_val = x_val.drop(['ModelName'], axis = 1)
 x_val = pd.DataFrame(pd.concat([x_val, encoded_df], axis = 1))
 
-# encode y-axis using Label Binarizer
-lb = LabelBinarizer()
+# scale data
+scaler = StandardScaler()
+x_train = scaler.fit_transform(x_train)
+x_test = scaler.transform(x_test)
+x_val = scaler.transform(x_val)
 
-y_train = pd.DataFrame(lb.fit_transform(y_train), index = y_train.index)
-y_test = pd.DataFrame(lb.fit_transform(y_test), index = y_test.index)
-y_val = pd.DataFrame(lb.fit_transform(y_val), index = y_val.index)
+# encode y-axis using Label Binarizer
+# lb = LabelBinarizer()
+
+# y_train = pd.DataFrame(lb.fit_transform(y_train), index = y_train.index)
+# y_test = pd.DataFrame(lb.fit_transform(y_test), index = y_test.index)
+# y_val = pd.DataFrame(lb.fit_transform(y_val), index = y_val.index)
+
+# train model
+
+from sklearn.multiclass import OneVsRestClassifier
+from sklearn.svm import LinearSVC
+
+clf = OneVsRestClassifier(LinearSVC(random_state=None)).fit(x_train, y_train)
+y_pred = clf.predict(x_test)
+
+
+from sklearn import metrics
+print("OneVsRest Accuracy:", metrics.accuracy_score(y_test, y_pred))
+
+from sklearn.metrics import accuracy_score
+
+from sklearn.tree import DecisionTreeClassifier
+
+dtree = DecisionTreeClassifier(max_depth=2, random_state=0)
+dtree.fit(x_train, y_train)
+dtree_preds = dtree.predict(x_test)
+dtree_acc = accuracy_score(y_test, dtree_preds)
+
+print("Decision Tree Accuracy:", dtree_acc)
+
+
+from sklearn.neighbors import KNeighborsClassifier
+
+knn = KNeighborsClassifier(n_neighbors=7)
+knn.fit(x_train, y_train)
+knn_preds = knn.predict(x_test)
+knn_acc = accuracy_score(y_test, knn_preds)
+
+print("KNN Accuracy:", knn_acc)
+
+from sklearn.naive_bayes import GaussianNB
+
+nb = GaussianNB()
+nb.fit(x_train, y_train)
+nb_preds = nb.predict(x_test)
+nb_acc = accuracy_score(y_test, nb_preds)
+
+print("Naive Bayes Accuracy:", nb_acc)
