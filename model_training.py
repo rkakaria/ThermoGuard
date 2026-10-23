@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import LabelBinarizer
+from sklearn.linear_model import LogisticRegression
 
 # load, clean, and format data - remove model numbers from laptops as they are all unique
 raw_data = pd.read_csv("motherboard.csv")
@@ -24,25 +25,25 @@ x_train, x_temp, y_train, y_temp = train_test_split(x, y, stratify = y, test_siz
 x_val, x_test, y_val, y_test = train_test_split(x_temp, y_temp, stratify = y_temp, test_size = (0.5), random_state = 1)
 
 # encode categorical data using OneHot encoding
-encoder = OneHotEncoder(sparse_output=False).set_output(transform = "pandas")
+encoder = OneHotEncoder(sparse_output=False, handle_unknown = 'ignore').set_output(transform = "pandas")
 
 train_cat = x_train.select_dtypes(exclude = 'number').columns
 train_encoded = encoder.fit_transform(x_train[train_cat])
 encoded_df = pd.DataFrame(train_encoded, columns = encoder.get_feature_names_out(train_cat))
 x_train = x_train.drop(['ModelName'], axis = 1)
-x_train = pd.concat([x_train, encoded_df], axis = 1)
+x_train = pd.DataFrame(pd.concat([x_train, encoded_df], axis = 1))
 
 test_cat = x_test.select_dtypes(exclude = 'number').columns
-test_encoded = encoder.fit_transform(x_test[test_cat])
+test_encoded = encoder.transform(x_test[test_cat])
 encoded_df = pd.DataFrame(test_encoded, columns = encoder.get_feature_names_out(test_cat))
 x_test = x_test.drop(['ModelName'], axis = 1)
-x_test = pd.concat([x_test, encoded_df], axis = 1)
+x_test = pd.DataFrame(pd.concat([x_test, encoded_df], axis = 1))
 
 val_cat = x_val.select_dtypes(exclude = 'number').columns
-val_encoded = encoder.fit_transform(x_val[val_cat])
+val_encoded = encoder.transform(x_val[val_cat])
 encoded_df = pd.DataFrame(val_encoded, columns = encoder.get_feature_names_out(val_cat))
 x_val = x_val.drop(['ModelName'], axis = 1)
-x_val = pd.concat([x_val, encoded_df], axis = 1)
+x_val = pd.DataFrame(pd.concat([x_val, encoded_df], axis = 1))
 
 # encode y-axis using Label Binarizer
 lb = LabelBinarizer()
