@@ -1,9 +1,9 @@
 import pandas as pd 
-from sklearn.model_selection import train_test_split
+from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.naive_bayes import GaussianNB
 from sklearn.model_selection import cross_val_score, StratifiedKFold
-from sklearn.pipeline import make_pipeline
+import pickle
 
 # load, clean, and format data - remove timestamps
 raw_data = pd.read_csv("Rotating_equipment_fault_data.csv")
@@ -23,3 +23,7 @@ scores = cross_val_score(model, x, y, cv = cv)
 
 print("CV Scores:", scores)
 print("Mean Score:", scores.mean())
+
+# save model
+filename = 'model.sav'
+pickle.dump(model, open(filename, 'wb'))
