@@ -9,6 +9,13 @@ The goal of this project is to build a system that takes rotating equipment heal
 
 We utilize the [Rotating Equipment Multi Sensor Fault Dataset](https://www.kaggle.com/datasets/zoya77/rotating-equipment-multi-sensor-fault-dataset) from Kaggle user zoya77 to train our ML model. 
 
+##  How to Run
+```
+git clone https://github.com/rkakaria/ThermoGuard.git
+python app.py
+```
+
 ## Dependencies
-- [numpy](https://numpy.org/)
 - [scikit-learn](https://scikit-learn.org/stable/index.html)
+- [pandas](https://pandas.pydata.org/)
+- [gradio](https://github.com/gradio-app/gradio)
