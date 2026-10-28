@@ -16,6 +16,7 @@ y = dataset['Fault_Type'] # target value; stratify based on this column
 
 # create pipeline to scale data and select model type
 model = make_pipeline(StandardScaler(), GaussianNB())
+model.fit(x, y)
 
 # perform stratified cross-validation and determine accuracy
 cv = StratifiedKFold(n_splits=5)
