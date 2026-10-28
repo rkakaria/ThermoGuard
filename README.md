@@ -1,4 +1,4 @@
-# ThermoGuard
+# Industrial Equipment Fault Prediction
 
 Industrial rotating equipment is subject to faults, which can be signaled by overheating, acoustic signals, or excessive vibration. Users may not notice measurements out of the ordinary until the equipment actually fails. Tools may show raw sensor numbers that most users cannot interpret. We need a system that reads machine health readings, recognizes overhearing and hardware problems early, and tells the user clearly what is happening and what to do. 
 
@@ -11,7 +11,7 @@ We utilize the [Rotating Equipment Multi Sensor Fault Dataset](https://www.kaggl
 
 ##  How to Run
 ```
-git clone https://github.com/rkakaria/ThermoGuard.git
+git clone https://github.com/rkakaria/industrial-equipment-fault-prediction.git
 python app.py
 ```
 

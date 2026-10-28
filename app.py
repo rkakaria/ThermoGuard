@@ -20,7 +20,7 @@ demo = gr.Interface(
         gr.Textbox(label = 'Acoustic Level - dB', info = 'Between 10 - 110'), 
         gr.Textbox(label = 'Temperature - ºC)', info = 'Between 50 - 110')], # units are extrapolated
     outputs=[gr.Textbox(label = 'Machine Status')],
-    title = "ThermoGuard",
+    title = "Industrial Equipment Fault Prediction",
     examples = "examples",
     description = "Predict whether your rotating industrial equipment is experiencing a fault.",
     live = True,
